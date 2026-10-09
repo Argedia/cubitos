@@ -1,0 +1,112 @@
+[
+  {
+    "file": "dice/red.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      95,
+      1200,
+      272,
+      1410
+    ]
+  },
+  {
+    "file": "dice/orange.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      272,
+      1200,
+      449,
+      1410
+    ]
+  },
+  {
+    "file": "dice/yellow.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      449,
+      1200,
+      626,
+      1410
+    ]
+  },
+  {
+    "file": "dice/green.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      626,
+      1200,
+      803,
+      1410
+    ]
+  },
+  {
+    "file": "dice/blue.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      803,
+      1200,
+      980,
+      1410
+    ]
+  },
+  {
+    "file": "dice/purple.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      980,
+      1200,
+      1157,
+      1410
+    ]
+  },
+  {
+    "file": "dice/brown.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      1157,
+      1200,
+      1334,
+      1410
+    ]
+  },
+  {
+    "file": "dice/white.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 4,
+    "crop": [
+      1334,
+      1200,
+      1511,
+      1410
+    ]
+  },
+  {
+    "file": "branding/logo.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 1,
+    "crop": [
+      170,
+      165,
+      1460,
+      465
+    ]
+  },
+  {
+    "file": "branding/cover.webp",
+    "source": "Cubitos_BaseGame_Rulebook_Optimized.pdf",
+    "page": 1,
+    "crop": [
+      120,
+      465,
+      1550,
+      1510
+    ]
+  }
+]
