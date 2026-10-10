@@ -32,7 +32,9 @@ let selection = emptySelection();
 let mode = "start";
 let preset = null;
 let linkError = "";
-let phaseFilter = "Todas";
+const PHASES = ["Ahora", "Activo", "Correr"];
+let phaseFilters = new Set(PHASES);
+let cardOrder = "manual";
 let selectorColor;
 let toastTimer;
 let dialogOpener;
@@ -47,7 +49,8 @@ function readLink() {
     preset = null;
     linkError = error.message;
   }
-  phaseFilter = "Todas";
+  phaseFilters = new Set(PHASES);
+  cardOrder = "manual";
 }
 
 function render() {
@@ -57,9 +60,19 @@ function render() {
   const visible = COLORS.filter(
     (_, index) =>
       !complete ||
-      phaseFilter === "Todas" ||
-      chosen[index].phases.includes(phaseFilter),
-  );
+      chosen[index].phases.some((phase) => phaseFilters.has(phase)),
+  ).sort((left, right) => {
+    if (cardOrder === "manual")
+      return COLORS.indexOf(left) - COLORS.indexOf(right);
+    const leftCard = chosen[COLORS.indexOf(left)];
+    const rightCard = chosen[COLORS.indexOf(right)];
+    if (cardOrder === "price")
+      return (
+        leftCard.cost - rightCard.cost ||
+        leftCard.name.localeCompare(rightCard.name, "es")
+      );
+    return leftCard.name.localeCompare(rightCard.name, "es");
+  });
   app.innerHTML = `
     <header class="topbar"><a class="brand" href="./" aria-label="Cubitos, nueva selección"><img src="./assets/branding/logo.webp" alt="Cubitos"><span>CONSULTA DE CARTAS</span></a>
       <button class="text-button help-button" data-action="help">¿Cuándo se activan? <span aria-hidden="true">?</span></button>
@@ -73,13 +86,35 @@ function render() {
         <button class="button primary" data-action="share" ${complete ? "" : "disabled"} aria-label="Compartir selección">Compartir <span aria-hidden="true">↗</span></button>
       </section>
       ${preset ? `<aside class="preset-context"><strong>Pista:</strong> ${esc(preset.track)}${preset.note ? `<p>${esc(preset.note)}</p>` : ""}<a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=8" target="_blank" rel="noopener">Reglamento · p. 8 ↗</a></aside>` : ""}
-      <div class="table-toolbar"><div>${complete ? `<div class="phase-filters" role="group" aria-label="Momento de activación">${["Todas", "Ahora", "Activo", "Correr"].map((phase) => `<button data-action="filter" data-phase="${phase}" aria-pressed="${phaseFilter === phase}" class="${phaseFilter === phase ? "active" : ""}">${phase}</button>`).join("")}</div>` : '<p class="subtle">Toca un color para elegir su carta.</p>'}</div><div class="preset-actions">${preset ? '<button class="text-button" data-action="customize" aria-label="Personalizar estas cartas">Personalizar</button>' : ""}<button class="text-button muted" data-action="reset" aria-label="Cambiar selección">Cambiar</button></div></div>
+      <div class="table-toolbar"><div>${complete ? tableControls() : '<p class="subtle">Toca un color para elegir su carta.</p>'}</div><div class="preset-actions">${preset ? '<button class="text-button" data-action="customize" aria-label="Personalizar estas cartas">Personalizar</button>' : ""}<button class="text-button muted" data-action="reset" aria-label="Cambiar selección">Cambiar</button></div></div>
       <div class="cards-grid">${visible.map((color) => cardSlot(color, chosen[COLORS.indexOf(color)], mode === "custom")).join("") || '<p class="empty-results">Ninguna de estas cartas tiene habilidades en ese momento.</p>'}</div>
 
 `
       }
     </main>
     <footer><span>Un compañero de consulta para Cubitos · John D. Clair / AEG</span><div><a href="./Cubitos_Traduccion_cartas.pdf" target="_blank" rel="noopener">Hoja en español ↗</a><a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf" target="_blank" rel="noopener">Reglamento original ↗</a></div></footer>`;
+}
+
+function tableControls() {
+  const allSelected = phaseFilters.size === PHASES.length;
+  return `<div class="table-controls">
+    <details class="menu-control filter-menu"><summary>Filtros</summary><div class="menu-panel" role="group" aria-label="Filtrar por momento de activación">
+      <label><input type="checkbox" data-action="filter-all" ${allSelected ? "checked" : ""}> Todas</label>
+      ${PHASES.map((phase) => `<label><input type="checkbox" data-action="filter" data-phase="${phase}" ${phaseFilters.has(phase) ? "checked" : ""}> ${phase}</label>`).join("")}
+    </div></details>
+    <details class="menu-control order-menu"><summary>Ordenar</summary><div class="menu-panel" role="radiogroup" aria-label="Orden de las cartas">
+      ${[
+        ["manual", "Orden del manual"],
+        ["price", "Precio"],
+        ["name", "Alfabético"],
+      ]
+        .map(
+          ([value, label]) =>
+            `<label><input type="radio" name="card-order" data-action="order" value="${value}" ${cardOrder === value ? "checked" : ""}> ${label}</label>`,
+        )
+        .join("")}
+    </div></details>
+  </div>`;
 }
 
 function setupChoices() {
@@ -114,7 +149,8 @@ function updateSelection(next) {
   preset = null;
   selection = next;
   linkError = "";
-  phaseFilter = "Todas";
+  phaseFilters = new Set(PHASES);
+  cardOrder = "manual";
   const nextHash = encodeSelection(next);
   if (location.hash !== nextHash) history.pushState(null, "", nextHash);
   render();
@@ -215,8 +251,17 @@ const actions = {
       ?.focus({ preventScroll: true });
   },
   detail: (element) => showDetail(element.dataset.id),
+  "filter-all": (element) => {
+    phaseFilters = element.checked ? new Set(PHASES) : new Set();
+    render();
+  },
   filter: (element) => {
-    phaseFilter = element.dataset.phase;
+    if (element.checked) phaseFilters.add(element.dataset.phase);
+    else phaseFilters.delete(element.dataset.phase);
+    render();
+  },
+  order: (element) => {
+    cardOrder = element.value;
     render();
   },
   preset: (element) => {

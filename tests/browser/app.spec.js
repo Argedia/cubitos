@@ -98,7 +98,8 @@ test("card rows keep the translated effect groups, price and colored identity", 
   await expect(batter.locator(".card-heading .cost")).toContainText("5");
   expect(
     await batter.evaluate(
-      (element) => getComputedStyle(element.closest(".card-slot")).borderLeftWidth,
+      (element) =>
+        getComputedStyle(element.closest(".card-slot")).borderLeftWidth,
     ),
   ).toBe("6px");
   const columns = await page
@@ -110,6 +111,33 @@ test("card rows keep the translated effect groups, price and colored identity", 
   const width = await page.evaluate(() => innerWidth);
   expect(columns).toBe(width >= 700 ? 2 : 1);
 });
+
+test("compact controls filter multiple timings and sort the visible cards", async ({
+  page,
+}) => {
+  await page.goto("/#p1=race-4");
+  await expect(page.locator(".table-controls")).toContainText("Filtros");
+  await expect(page.locator(".table-controls")).toContainText("Ordenar");
+
+  await page.locator(".filter-menu summary").click();
+  await page.locator('[data-action="filter-all"]').uncheck();
+  await expect(page.locator(".cards-grid .card-slot")).toHaveCount(0);
+  await page.locator(".filter-menu summary").click();
+  await page.locator('[data-action="filter"][data-phase="Correr"]').check();
+  const runCards = await page.locator(".cards-grid .card-slot").count();
+  expect(runCards).toBeGreaterThan(0);
+  await page.locator(".filter-menu summary").click();
+  await page.locator('[data-action="filter"][data-phase="Activo"]').check();
+  expect(
+    await page.locator(".cards-grid .card-slot").count(),
+  ).toBeGreaterThanOrEqual(runCards);
+
+  await page.locator(".order-menu summary").click();
+  await page.locator('[data-action="order"][value="name"]').check();
+  const names = await page.locator(".card-heading strong").allTextContents();
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "es")));
+});
+
 test("invalid links show an error and can be replaced with a valid selection", async ({
   page,
 }) => {

@@ -288,6 +288,74 @@ h1 em {
   background: #214e43;
   color: white;
 }
+.table-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.menu-control {
+  position: relative;
+}
+.menu-control summary {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border: 1px solid #c7d2c2;
+  border-radius: 7px;
+  color: #214e43;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.menu-control summary::-webkit-details-marker {
+  display: none;
+}
+.menu-control summary::after {
+  content: "⌄";
+  font-size: 16px;
+  line-height: 1;
+}
+.menu-control[open] summary {
+  background: #e7eee0;
+  border-color: #78936f;
+}
+.menu-panel {
+  position: absolute;
+  z-index: 3;
+  top: calc(100% + 6px);
+  left: 0;
+  display: grid;
+  gap: 2px;
+  min-width: 180px;
+  padding: 7px;
+  background: #fffef9;
+  border: 1px solid #c7d2c2;
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(26, 56, 43, 0.13);
+}
+.menu-panel label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  color: #24463d;
+  font-size: 14px;
+  cursor: pointer;
+}
+.menu-panel label:hover {
+  background: #edf2e8;
+}
+.menu-panel input {
+  width: 17px;
+  height: 17px;
+  accent-color: #28614f;
+}
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
