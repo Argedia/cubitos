@@ -24,6 +24,10 @@ const modal = document.querySelector("#modal");
 const response = await fetch("./src/data/cards.json");
 if (!response.ok) throw new Error("No se pudieron cargar las cartas.");
 const cards = await response.json();
+const consultationResponse = await fetch("./src/data/consultations.json");
+if (!consultationResponse.ok)
+  throw new Error("No se pudieron cargar las consultas.");
+const consultations = await consultationResponse.json();
 let selection = emptySelection();
 let mode = "start";
 let preset = null;
@@ -153,7 +157,9 @@ function renderSelector(query) {
     (card) =>
       card.color === selectorColor.id &&
       terms.every((term) =>
-        normalize(`${card.name} ${card.summary} ${card.text}`).includes(term),
+        normalize(
+          `${card.name} ${card.summary} ${card.text} ${consultations[card.id].sections.flatMap((section) => section.paragraphs).join(" ")}`,
+        ).includes(term),
       ),
   );
   modal.querySelector("#selector-results").innerHTML = selectorOptions(
@@ -167,14 +173,11 @@ function showDetail(id) {
   const card = cards.find((card) => card.id === id);
   if (!card) return;
   const color = COLORS.find((color) => color.id === card.color);
-  const paragraphs = card.text.split(
-    /\s+(?=(?:Ahora|Activo|Correr)(?:\s*\(|:))/,
-  );
+  const consultation = consultations[card.id];
   openDialog(
     `<div class="detail-heading" style="--accent:${color.color}">${dice(color)}<div><span class="color-label"><i></i>${color.name} · ${card.cost} monedas</span><h2>${esc(card.name)}</h2></div></div>
-    <h3 class="original-heading">Texto completo · español</h3><div class="full-rule">${paragraphs.map((text) => `<p>${summaryWithIcons(text, card.color)}</p>`).join("")}</div>
-    ${card.note ? `<section class="clarification"><h3>Aclaración del reglamento</h3><p>${summaryWithIcons(card.note)}</p></section>` : ""}
-    <div class="source-links"><a href="./Cubitos_Traduccion_cartas.pdf#page=${card.sourcePage}" target="_blank" rel="noopener">Hoja en español · p. ${card.sourcePage} ↗</a><a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=${card.rulebookPage}" target="_blank" rel="noopener">Aclaraciones originales · p. ${card.rulebookPage} ↗</a></div>`,
+    <div class="full-rule">${consultation.sections.map((section) => `<section class="consultation-section"><h3>${esc(section.title)}</h3>${section.paragraphs.map((text) => `<p>${summaryWithIcons(text, card.color)}</p>`).join("")}</section>`).join("")}</div>
+    <details class="consultation-sources"><summary>Fuentes de esta consulta</summary><p>Reglas y aclaraciones del manual, complementadas con el efecto traducido.</p><div class="source-links">${consultation.rulebookPages.map((page) => `<a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=${page}" target="_blank" rel="noopener">Manual · p. ${page} ↗</a>`).join("")}<a href="./Cubitos_Traduccion_cartas.pdf#page=${consultation.translationPage}" target="_blank" rel="noopener">Efecto traducido · p. ${consultation.translationPage} ↗</a></div>${consultation.sourceDecision ? `<p>${esc(consultation.sourceDecision)}</p>` : ""}</details>`,
     true,
   );
 }

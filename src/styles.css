@@ -21,6 +21,37 @@
 .rule-quantity {
   white-space: nowrap;
 }
+.consultation-section {
+  margin: 0 0 20px;
+}
+.consultation-section h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 0 0 8px;
+}
+.consultation-section p {
+  margin: 0 0 12px;
+  font-size: 17px;
+  line-height: 1.65;
+}
+.consultation-section + .consultation-section {
+  border-top: 1px solid #e0e4d6;
+  padding-top: 16px;
+}
+.consultation-sources {
+  border-top: 1px solid #e0e4d6;
+  font-size: 14px;
+  padding-top: 8px;
+}
+.consultation-sources summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding: 10px 0;
+}
+.consultation-sources .source-links {
+  margin-top: 12px;
+  gap: 6px;
+}
 .icon-legend {
   display: flex;
   flex-wrap: wrap;

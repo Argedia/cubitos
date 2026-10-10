@@ -30,7 +30,9 @@ test("select, share in a fresh browser, read full text and restore history", asy
     })
     .click();
   await expect(recipient.locator(".full-rule")).toBeVisible();
-  await expect(recipient.getByText("Texto completo · español")).toBeVisible();
+  await expect(recipient.locator(".full-rule")).toContainText(
+    "blancos y verdes",
+  );
   await context.close();
   await page.getByRole("button", { name: "Cerrar", exact: true }).click();
   await page.goBack();
@@ -48,6 +50,34 @@ test("select, share in a fresh browser, read full text and restore history", asy
       .first()
       .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
   ).toBeGreaterThanOrEqual(16);
+});
+
+test("consultation integrates the effect, example and manual sources without a second clarification block", async ({
+  page,
+}) => {
+  await page.goto("/#p1=race-2");
+  await page
+    .getByRole("button", {
+      name: "Ver regla completa de The Big Cheese",
+      exact: true,
+    })
+    .click();
+  const content = page.locator(".full-rule");
+  await expect(content).toContainText("elige entre ganar");
+  await expect(content).toContainText("redondeando hacia abajo");
+  await expect(content).toContainText("No sumes las dos opciones");
+  await expect(
+    content.getByRole("heading", { name: "Ejemplo", exact: true }),
+  ).toBeVisible();
+  await expect(content.locator('img[alt="fans"]')).not.toHaveCount(0);
+  await expect(page.locator(".clarification")).toHaveCount(0);
+  await page.locator(".consultation-sources summary").click();
+  await expect(
+    page.getByRole("link", { name: "Manual · p. 15 ↗", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /Efecto traducido/ }),
+  ).toBeVisible();
 });
 test("invalid links show an error and can be replaced with a valid selection", async ({
   page,

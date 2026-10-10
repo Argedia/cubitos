@@ -18,7 +18,9 @@ El fragmento `#c1=00000000` representa la primera partida recomendada. Cada díg
 
 Las 56 cartas proceden de `Cubitos_Traduccion_cartas.pdf`. El reglamento original aporta la primera partida (p. 6), los momentos de activación (p. 9) y aclaraciones (pp. 14–17). Se mantienen los nombres originales para reconocer las cartas físicas.
 
-Dos correcciones del reglamento se señalan en el detalle: Shimmy Shimmy Dino cuenta blancos y grises; Up to 11 se usa antes de tirar. `providedText` conserva la transcripción suministrada. Los resúmenes son orientativos; el detalle presenta el texto completo y sus aclaraciones.
+Las 56 consultas en `src/data/consultations.json` integran las aclaraciones del manual (fuente principal) con los efectos traducidos (fuente secundaria), sin duplicar ambos textos. Incluyen procedimientos, condiciones, pérdidas obligatorias y ejemplos pertinentes. Cada entrada registra las páginas de las fuentes y las decisiones ante discrepancias. `providedText` conserva la transcripción suministrada, separada de la consulta redactada.
+
+Para regenerar las consultas después de extraer las cartas: `python scripts/compose_consultations.py`. Este script contiene la redacción revisada de cada carta; no realiza una combinación automática de textos. Deben revisarse los cambios de reglas contra las páginas originales antes de editarlo.
 
 Los recursos originales están organizados en `assets/branding` y `assets/dice`. El manifiesto registra PDF, página y recorte. Las ilustraciones representan el dado del color, no una reproducción de cada carta. Para regenerar el contenido: instalar PyMuPDF y ejecutar `python scripts/extract_content.py` con ambos PDF en la raíz. Revisar cualquier cambio antes de modificar códigos publicados.
 
