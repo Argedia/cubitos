@@ -30,9 +30,11 @@ export const ruleIcon = (label) =>
   `<img class="rule-icon" src="./assets/icons/${RULE_ICONS[label]}" alt="${label}" title="${label}">`;
 export const summaryWithIcons = (text) =>
   escapeHtml(text).replace(
-    /\b(\d+) (movimientos?|monedas?|créditos?|espadas?)\b/g,
-    (_, amount, label) =>
-      `<span class="rule-quantity">${amount} ${ruleIcon(label)}</span>`,
+    /\b(?:(\d+) (movimientos?|monedas?|créditos?|espadas?)|(espadas?))\b/g,
+    (_, amount, label, sword) =>
+      sword
+        ? ruleIcon(sword)
+        : `<span class="rule-quantity">${amount} ${ruleIcon(label)}</span>`,
   );
 
 export function cardSlot(color, card, editable = true) {
