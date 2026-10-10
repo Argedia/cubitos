@@ -36,5 +36,113 @@
       422.75543212890625
     ],
     "type": "original vector paths"
+  },
+  {
+    "file": "fans.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 14,
+    "bounds": [
+      490.6249084472656,
+      593.0292358398438,
+      502.1199035644531,
+      607.7432250976562
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "power.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      84.5886001586914,
+      581.2898559570312,
+      100.55449676513672,
+      597.256591796875
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-orange.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      26.156599044799805,
+      352.63092041015625,
+      59.91559982299805,
+      382.2899169921875
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-white.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      67.79119873046875,
+      351.2279052734375,
+      106.908203125,
+      383.909912109375
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-yellow.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      115.7018051147461,
+      352.958740234375,
+      145.455810546875,
+      382.7107238769531
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-purple.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      157.01919555664062,
+      350.80511474609375,
+      182.02020263671875,
+      383.0852966308594
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-brown.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      22.45899772644043,
+      391.4399108886719,
+      62.00299835205078,
+      421.5259094238281
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-blue.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      72.88059997558594,
+      391.6429138183594,
+      103.26959991455078,
+      422.0329284667969
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "ability-green.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      117.39199829101562,
+      391.2474060058594,
+      143.80899047851562,
+      423.4084167480469
+    ],
+    "type": "original vector paths"
   }
 ]

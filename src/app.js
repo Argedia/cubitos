@@ -16,6 +16,7 @@ import {
   cardSlot,
   selectorOptions,
   ruleIcon,
+  summaryWithIcons,
 } from "./views.js";
 
 const app = document.querySelector("#app");
@@ -171,8 +172,8 @@ function showDetail(id) {
   );
   openDialog(
     `<div class="detail-heading" style="--accent:${color.color}">${dice(color)}<div><span class="color-label"><i></i>${color.name} · ${card.cost} monedas</span><h2>${esc(card.name)}</h2></div></div>
-    <h3 class="original-heading">Texto completo · español</h3><div class="full-rule">${paragraphs.map((text) => `<p>${esc(text)}</p>`).join("")}</div>
-    ${card.note ? `<section class="clarification"><h3>Aclaración del reglamento</h3><p>${esc(card.note)}</p></section>` : ""}
+    <h3 class="original-heading">Texto completo · español</h3><div class="full-rule">${paragraphs.map((text) => `<p>${summaryWithIcons(text, card.color)}</p>`).join("")}</div>
+    ${card.note ? `<section class="clarification"><h3>Aclaración del reglamento</h3><p>${summaryWithIcons(card.note)}</p></section>` : ""}
     <div class="source-links"><a href="./Cubitos_Traduccion_cartas.pdf#page=${card.sourcePage}" target="_blank" rel="noopener">Hoja en español · p. ${card.sourcePage} ↗</a><a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=${card.rulebookPage}" target="_blank" rel="noopener">Aclaraciones originales · p. ${card.rulebookPage} ↗</a></div>`,
     true,
   );
@@ -227,7 +228,7 @@ const actions = {
   close: closeDialog,
   help: () =>
     openDialog(
-      `<h2>¿Cuándo uso una habilidad?</h2><div class="icon-legend">${["movimiento", "monedas", "créditos", "espadas"].map((label) => `<span>${ruleIcon(label)} ${label}</span>`).join("")}</div><div class="timing-help"><h3>Ahora</h3><p>Al colocar en tu zona activa el dado con ese símbolo. Si coinciden varias habilidades, eliges el orden.</p><h3>Activo</h3><p>Mientras el dado esté en tu zona activa. Respeta la condición de la carta: algunas se usan al presionar o al fallar.</p><h3>Correr</h3><p>Solo durante la fase Correr. Puedes ordenar tus habilidades Correr como prefieras, respetando los pasos indicados.</p><h3>Símbolo especial</h3><p>Añade el efecto especial al normal. Si usas el efecto normal, también debes aplicar el especial. Algunas pérdidas de dados son obligatorias aunque decidas no usar el beneficio.</p></div><a class="source-link" href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=9" target="_blank" rel="noopener">Reglamento original · p. 9 ↗</a>`,
+      `<h2>¿Cuándo uso una habilidad?</h2><div class="icon-legend">${["movimiento", "monedas", "créditos", "espadas", "fans", "símbolo especial"].map((label) => `<span>${ruleIcon(label)} ${label}</span>`).join("")}</div><div class="timing-help"><h3>Ahora</h3><p>Al colocar en tu zona activa el dado con ese símbolo. Si coinciden varias habilidades, eliges el orden.</p><h3>Activo</h3><p>Mientras el dado esté en tu zona activa. Respeta la condición de la carta: algunas se usan al presionar o al fallar.</p><h3>Correr</h3><p>Solo durante la fase Correr. Puedes ordenar tus habilidades Correr como prefieras, respetando los pasos indicados.</p><h3>Símbolo especial</h3><p>Añade el efecto especial al normal. Si usas el efecto normal, también debes aplicar el especial. Algunas pérdidas de dados son obligatorias aunque decidas no usar el beneficio.</p></div><a class="source-link" href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=9" target="_blank" rel="noopener">Reglamento original · p. 9 ↗</a>`,
     ),
 };
 
