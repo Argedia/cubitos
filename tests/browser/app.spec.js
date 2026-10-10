@@ -121,12 +121,12 @@ test("compact controls filter multiple timings and sort the visible cards", asyn
 
   await page.locator(".filter-menu summary").click();
   await page.locator('[data-action="filter-all"]').uncheck();
+  await expect(page.locator(".filter-menu")).toHaveAttribute("open", "");
   await expect(page.locator(".cards-grid .card-slot")).toHaveCount(0);
-  await page.locator(".filter-menu summary").click();
   await page.locator('[data-action="filter"][data-phase="Correr"]').check();
+  await expect(page.locator(".filter-menu")).toHaveAttribute("open", "");
   const runCards = await page.locator(".cards-grid .card-slot").count();
   expect(runCards).toBeGreaterThan(0);
-  await page.locator(".filter-menu summary").click();
   await page.locator('[data-action="filter"][data-phase="Activo"]').check();
   expect(
     await page.locator(".cards-grid .card-slot").count(),

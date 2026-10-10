@@ -35,6 +35,7 @@ let linkError = "";
 const PHASES = ["Ahora", "Activo", "Correr"];
 let phaseFilters = new Set(PHASES);
 let cardOrder = "manual";
+let filtersOpen = false;
 let selectorColor;
 let toastTimer;
 let dialogOpener;
@@ -51,6 +52,7 @@ function readLink() {
   }
   phaseFilters = new Set(PHASES);
   cardOrder = "manual";
+  filtersOpen = false;
 }
 
 function render() {
@@ -98,7 +100,7 @@ function render() {
 function tableControls() {
   const allSelected = phaseFilters.size === PHASES.length;
   return `<div class="table-controls">
-    <details class="menu-control filter-menu"><summary>Filtros</summary><div class="menu-panel" role="group" aria-label="Filtrar por momento de activación">
+    <details class="menu-control filter-menu" ${filtersOpen ? "open" : ""}><summary>Filtros</summary><div class="menu-panel" role="group" aria-label="Filtrar por momento de activación">
       <label><input type="checkbox" data-action="filter-all" ${allSelected ? "checked" : ""}> Todas</label>
       ${PHASES.map((phase) => `<label><input type="checkbox" data-action="filter" data-phase="${phase}" ${phaseFilters.has(phase) ? "checked" : ""}> ${phase}</label>`).join("")}
     </div></details>
@@ -151,6 +153,7 @@ function updateSelection(next) {
   linkError = "";
   phaseFilters = new Set(PHASES);
   cardOrder = "manual";
+  filtersOpen = false;
   const nextHash = encodeSelection(next);
   if (location.hash !== nextHash) history.pushState(null, "", nextHash);
   render();
@@ -253,15 +256,18 @@ const actions = {
   detail: (element) => showDetail(element.dataset.id),
   "filter-all": (element) => {
     phaseFilters = element.checked ? new Set(PHASES) : new Set();
+    filtersOpen = true;
     render();
   },
   filter: (element) => {
     if (element.checked) phaseFilters.add(element.dataset.phase);
     else phaseFilters.delete(element.dataset.phase);
+    filtersOpen = true;
     render();
   },
   order: (element) => {
     cardOrder = element.value;
+    filtersOpen = false;
     render();
   },
   preset: (element) => {
@@ -291,6 +297,13 @@ document.addEventListener("click", async (event) => {
     notify(error.message);
   }
 });
+document.addEventListener(
+  "toggle",
+  (event) => {
+    if (event.target.matches?.(".filter-menu")) filtersOpen = event.target.open;
+  },
+  true,
+);
 modal.addEventListener("input", (event) => {
   if (event.target.id === "card-search") renderSelector(event.target.value);
 });
