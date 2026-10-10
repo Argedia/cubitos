@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { summaryWithIcons } from "../src/views.js";
+import { summaryWithIcons, dice, effectLines } from "../src/views.js";
 import { readFileSync, existsSync } from "node:fs";
 test("swords render with and without quantities without replacing generated markup", () => {
   for (const text of [
@@ -18,6 +18,36 @@ test("swords render with and without quantities without replacing generated mark
   }
   assert.match(summaryWithIcons("Gana 2 movimientos."), /movement.svg/);
   assert.match(summaryWithIcons("<script>espadas</script>"), /&lt;script&gt;/);
+});
+
+test("runner emblems identify dice without confusing them with results or red track lines", () => {
+  const text =
+    "Con 1 dado café, blancos y verdes activos, cuenta los morados; quedan 3 líneas rojas.";
+  const html = summaryWithIcons(text, "purple");
+  for (const file of [
+    "ability-brown.svg",
+    "ability-white.svg",
+    "ability-green.svg",
+    "ability-purple.svg",
+  ])
+    assert.ok(html.includes(file));
+  assert.ok(html.includes("1 dado "));
+  assert.ok(html.includes("3 líneas rojas"));
+  assert.equal(
+    html
+      .replace(/<img[^>]*alt="([^"]*)"[^>]*>/g, "$1")
+      .replace(/<\/?span[^>]*>/g, ""),
+    text,
+  );
+  assert.match(dice({ id: "purple", name: "Morado" }), /ability-purple.svg/);
+  assert.match(
+    summaryWithIcons("Usa dos símbolos y un dado morado.", "purple"),
+    /alt="símbolos"/,
+  );
+  assert.match(
+    summaryWithIcons("El dado de jugador inicial y los grises."),
+    /jugador inicial y los grises/,
+  );
 });
 
 test("unquantified resources, fans and special abilities use original icons", () => {
@@ -64,4 +94,24 @@ test("all card rule renderings retain their text through accessible icon names",
         card[key].replaceAll("símbolo especial", "especial"),
       );
     }
+});
+test("translated effects remain grouped by their repeated timing headings", () => {
+  const cards = JSON.parse(
+    readFileSync(new URL("../src/data/cards.json", import.meta.url), "utf8"),
+  );
+  const babe = cards.find((card) => card.id === "the-babe");
+  assert.deepEqual(effectLines(babe), [
+    { phase: "Correr", qualifier: "", text: "Se ganan 5 monedas." },
+    {
+      phase: "Correr",
+      qualifier: "especial",
+      text: "También se gana 1 movimiento, se pierde este dado. (no opcional).",
+    },
+  ]);
+  const beaver = cards.find((card) => card.id === "batter-beaver");
+  assert.equal(effectLines(beaver).length, 2);
+  assert.deepEqual(
+    effectLines(beaver).map((line) => line.phase),
+    ["Ahora", "Correr"],
+  );
 });

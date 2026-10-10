@@ -6,8 +6,42 @@ export const escapeHtml = (value) =>
         character
       ],
   );
+const SYMBOL_FILES = {
+  red: "swords.svg",
+  orange: "ability-orange.svg",
+  yellow: "ability-yellow.svg",
+  green: "ability-green.svg",
+  blue: "ability-blue.svg",
+  purple: "ability-purple.svg",
+  brown: "ability-brown.svg",
+  white: "ability-white.svg",
+};
+const COLOR_WORDS = {
+  rojo: "red",
+  rojos: "red",
+  naranja: "orange",
+  naranjas: "orange",
+  amarillo: "yellow",
+  amarillos: "yellow",
+  verde: "green",
+  verdes: "green",
+  azul: "blue",
+  azules: "blue",
+  morado: "purple",
+  morados: "purple",
+  café: "brown",
+  cafés: "brown",
+  blanco: "white",
+  blancos: "white",
+};
+export const dieSymbol = (color, label, className = "rule-icon") =>
+  `<img class="${className}" src="./assets/icons/${SYMBOL_FILES[color]}" alt="${escapeHtml(label)}" title="${escapeHtml(label)}">`;
 export const dice = (color, className = "") =>
-  `<img class="dice ${className}" src="./assets/dice/${color.id}.webp" alt="Dado ${color.name.toLowerCase()}">`;
+  dieSymbol(
+    color.id,
+    `Dado ${color.name.toLowerCase()}`,
+    `dice die-symbol ${className}`,
+  );
 export const phases = (card) =>
   card.phases
     .map(
@@ -32,7 +66,10 @@ const RULE_ICONS = {
 };
 export const ruleIcon = (label, color) => {
   const key = label.toLowerCase();
+  if (key === "este dado" && color)
+    return `${escapeHtml(label.slice(0, -4))}${dieSymbol(color, "dado")}`;
   const normal = /^símbolos?$/.test(key);
+  if (COLOR_WORDS[key]) return dieSymbol(COLOR_WORDS[key], label);
   const file =
     normal && color
       ? color === "red"
@@ -45,12 +82,32 @@ export const ruleIcon = (label, color) => {
 };
 export const summaryWithIcons = (text, color) =>
   escapeHtml(text).replace(
-    /\b(?:(\d+) )?(símbolo especial|movimientos?|monedas?|créditos?|espadas?|fans?|especial|símbolos?)\b/gi,
+    /(?<![\p{L}])(?:(\d+) )?(este dado|símbolo especial|movimientos?|monedas?|créditos?|espadas?|fans?|especial|símbolos?|rojos?|naranjas?|amarillos?|verdes?|azules|azul|morados?|cafés?|blancos?)(?![\p{L}])/giu,
     (_, amount, label) =>
       amount
         ? `<span class="rule-quantity">${amount} ${ruleIcon(label, color)}</span>`
         : ruleIcon(label, color),
   );
+
+export const effectLines = (card) => {
+  const source = card.providedText || card.text;
+  const parts = source.split(
+    /(?=(?:Ahora|Activo|Correr)(?:\s*\((?:especial|comparar espadas)\))?\s*:)/i,
+  );
+  return parts
+    .map((part) => {
+      const match = part.match(
+        /^(Ahora|Activo|Correr)(?:\s*\((especial|comparar espadas)\))?\s*:\s*(.*)$/is,
+      );
+      if (!match) return { phase: "", qualifier: "", text: part.trim() };
+      return {
+        phase: match[1],
+        qualifier: match[2] || "",
+        text: match[3].trim(),
+      };
+    })
+    .filter((line) => line.text);
+};
 
 export function cardSlot(color, card, editable = true) {
   return `<article class="card-slot ${card ? "chosen" : "empty"}" style="--accent:${color.color}" data-color="${color.id}">
@@ -58,14 +115,13 @@ export function cardSlot(color, card, editable = true) {
     ${
       card
         ? `<button class="card-detail" data-action="detail" data-id="${card.id}" aria-label="Ver regla completa de ${escapeHtml(card.name)}">
-      <span class="card-heading">${dice(color)}<strong>${escapeHtml(card.name)}</strong></span>
-      <span class="phases">${phases(card)}</span>
-      <span class="summary">${summaryWithIcons(
-        card.summary
-          .replace(/^(Ahora: |Al correr, )/, "")
-          .replace(/^./, (letter) => letter.toUpperCase()),
-        card.color,
-      )}</span>
+      <span class="card-heading">${dice(color)}<strong>${escapeHtml(card.name)}</strong><span class="cost" aria-label="Precio: ${card.cost} monedas">${card.cost} ${ruleIcon("monedas")}</span></span>
+      <span class="effect-lines">${effectLines(card)
+        .map(
+          (line) =>
+            `<span class="effect-line"><span class="phase phase-${line.phase.toLowerCase()}">${escapeHtml(line.phase)}</span><span class="effect-copy">${line.qualifier ? `<strong>${escapeHtml(line.qualifier === "especial" ? "Especial" : "Comparar espadas")}:</strong> ` : ""}${summaryWithIcons(line.text, card.color)}</span></span>`,
+        )
+        .join("")}</span>
     </button>${editable ? `<button class="change-card" data-action="choose" data-color="${color.id}" aria-label="Cambiar carta ${color.name.toLowerCase()}">Cambiar carta</button>` : ""}`
         : `
     <button class="empty-choice" data-action="choose" data-color="${color.id}" aria-label="Elegir carta ${color.name.toLowerCase()}">

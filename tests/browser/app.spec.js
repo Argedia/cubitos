@@ -30,8 +30,11 @@ test("select, share in a fresh browser, read full text and restore history", asy
     })
     .click();
   await expect(recipient.locator(".full-rule")).toBeVisible();
-  await expect(recipient.locator(".full-rule")).toContainText(
-    "blancos y verdes",
+  await expect(recipient.locator('.full-rule img[alt="blancos"]')).toHaveCount(
+    1,
+  );
+  await expect(recipient.locator('.full-rule img[alt="verdes"]')).toHaveCount(
+    1,
   );
   await context.close();
   await page.getByRole("button", { name: "Cerrar", exact: true }).click();
@@ -46,7 +49,7 @@ test("select, share in a fresh browser, read full text and restore history", asy
   ).toBeTruthy();
   expect(
     await page
-      .locator(".summary")
+      .locator(".effect-line")
       .first()
       .evaluate((el) => parseFloat(getComputedStyle(el).fontSize)),
   ).toBeGreaterThanOrEqual(16);
@@ -55,7 +58,7 @@ test("select, share in a fresh browser, read full text and restore history", asy
 test("consultation integrates the effect, example and manual sources without a second clarification block", async ({
   page,
 }) => {
-  await page.goto("/#p1=race-2");
+  await page.goto("/#p1=race-4");
   await page
     .getByRole("button", {
       name: "Ver regla completa de The Big Cheese",
@@ -78,6 +81,34 @@ test("consultation integrates the effect, example and manual sources without a s
   await expect(
     page.getByRole("link", { name: /Efecto traducido/ }),
   ).toBeVisible();
+});
+
+test("card rows keep the translated effect groups, price and colored identity", async ({
+  page,
+}) => {
+  await page.goto("/#p1=race-4");
+  const batter = page.locator('[data-id="batter-beaver"]');
+  await expect(batter.locator(".effect-line")).toHaveCount(2);
+  await expect(batter.locator(".effect-line").first()).toContainText(
+    "Elige 2 dados de la zona de robo",
+  );
+  await expect(batter.locator(".effect-line").nth(1)).toContainText(
+    "se ganó cualquier",
+  );
+  await expect(batter.locator(".card-heading .cost")).toContainText("5");
+  expect(
+    await batter.evaluate(
+      (element) => getComputedStyle(element.closest(".card-slot")).borderLeftWidth,
+    ),
+  ).toBe("6px");
+  const columns = await page
+    .locator(".cards-grid")
+    .evaluate(
+      (element) =>
+        getComputedStyle(element).gridTemplateColumns.split(" ").length,
+    );
+  const width = await page.evaluate(() => innerWidth);
+  expect(columns).toBe(width >= 700 ? 2 : 1);
 });
 test("invalid links show an error and can be replaced with a valid selection", async ({
   page,
