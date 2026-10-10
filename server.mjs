@@ -13,6 +13,8 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".webp": "image/webp",
+  ".png": "image/png",
+  ".svg": "image/svg+xml",
   ".pdf": "application/pdf",
 };
 const reloadClient = `<script>const live = new EventSource('/__reload'); live.addEventListener('change', () => location.reload());</script>`;

@@ -12,6 +12,22 @@
   font-synthesis: none;
   line-height: 1.5;
 }
+.rule-icon {
+  width: 19px;
+  height: 19px;
+  object-fit: contain;
+  vertical-align: -4px;
+}
+.rule-quantity {
+  white-space: nowrap;
+}
+.icon-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  font-size: 15px;
+  margin: 12px 0 24px;
+}
 * {
   box-sizing: border-box;
 }

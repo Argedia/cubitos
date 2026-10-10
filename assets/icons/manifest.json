@@ -1,0 +1,40 @@
+[
+  {
+    "file": "money.png",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "xref": 1096,
+    "mask": 1095
+  },
+  {
+    "file": "credit.png",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "xref": 1126,
+    "mask": 1127
+  },
+  {
+    "file": "movement.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      206.52699279785156,
+      87.56414794921875,
+      227.3939971923828,
+      122.85433959960938
+    ],
+    "type": "original vector paths"
+  },
+  {
+    "file": "swords.svg",
+    "source": "Cubitos_BaseGame_Rulebook-lowrez.pdf",
+    "page": 9,
+    "bounds": [
+      153.00900268554688,
+      391.0394287109375,
+      187.37229919433594,
+      422.75543212890625
+    ],
+    "type": "original vector paths"
+  }
+]

@@ -10,7 +10,13 @@ import {
   shareUrl,
   normalize,
 } from "./selection.js";
-import { escapeHtml as esc, dice, cardSlot, selectorOptions } from "./views.js";
+import {
+  escapeHtml as esc,
+  dice,
+  cardSlot,
+  selectorOptions,
+  ruleIcon,
+} from "./views.js";
 
 const app = document.querySelector("#app");
 const modal = document.querySelector("#modal");
@@ -221,7 +227,7 @@ const actions = {
   close: closeDialog,
   help: () =>
     openDialog(
-      `<h2>¿Cuándo uso una habilidad?</h2><div class="timing-help"><h3>Ahora</h3><p>Al colocar en tu zona activa el dado con ese símbolo. Si coinciden varias habilidades, eliges el orden.</p><h3>Activo</h3><p>Mientras el dado esté en tu zona activa. Respeta la condición de la carta: algunas se usan al presionar o al fallar.</p><h3>Correr</h3><p>Solo durante la fase Correr. Puedes ordenar tus habilidades Correr como prefieras, respetando los pasos indicados.</p><h3>Símbolo especial</h3><p>Añade el efecto especial al normal. Si usas el efecto normal, también debes aplicar el especial. Algunas pérdidas de dados son obligatorias aunque decidas no usar el beneficio.</p></div><a class="source-link" href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=9" target="_blank" rel="noopener">Reglamento original · p. 9 ↗</a>`,
+      `<h2>¿Cuándo uso una habilidad?</h2><div class="icon-legend">${["movimiento", "monedas", "créditos", "espadas"].map((label) => `<span>${ruleIcon(label)} ${label}</span>`).join("")}</div><div class="timing-help"><h3>Ahora</h3><p>Al colocar en tu zona activa el dado con ese símbolo. Si coinciden varias habilidades, eliges el orden.</p><h3>Activo</h3><p>Mientras el dado esté en tu zona activa. Respeta la condición de la carta: algunas se usan al presionar o al fallar.</p><h3>Correr</h3><p>Solo durante la fase Correr. Puedes ordenar tus habilidades Correr como prefieras, respetando los pasos indicados.</p><h3>Símbolo especial</h3><p>Añade el efecto especial al normal. Si usas el efecto normal, también debes aplicar el especial. Algunas pérdidas de dados son obligatorias aunque decidas no usar el beneficio.</p></div><a class="source-link" href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=9" target="_blank" rel="noopener">Reglamento original · p. 9 ↗</a>`,
     ),
 };
 
