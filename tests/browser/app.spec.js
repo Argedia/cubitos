@@ -9,7 +9,7 @@ test("select, share in a fresh browser, read full text and restore history", asy
   await page.locator('[data-preset="race-1"]').click();
   await expect(page).toHaveURL(/#p1=race-1$/);
   await expect(page.locator('[data-action="choose"]')).toHaveCount(0);
-  await page.getByRole("button", { name: "Personalizar estas cartas" }).click();
+  await page.getByRole("button", { name: "Editar selección" }).click();
   await expect(page).toHaveURL(/#c1=00000000$/);
   await page
     .getByRole("button", { name: "Cambiar carta rojo", exact: true })
@@ -180,9 +180,7 @@ test("preset link restores its name and eight cards; custom starts with empty sl
   await expect(recipient.locator('[data-action="choose"]')).toHaveCount(0);
   await context.close();
   await page.getByRole("button", { name: "Cerrar", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Cambiar selección", exact: true })
-    .click();
+  await page.getByRole("link", { name: "Cubitos, nueva selección" }).click();
   await page.locator('[data-action="custom"]').click();
   await expect(page.locator(".card-slot.empty")).toHaveCount(8);
   await expect(

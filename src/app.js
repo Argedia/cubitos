@@ -84,11 +84,11 @@ function render() {
       ${
         mode === "start"
           ? setupChoices()
-          : `      <section class="selection-bar" aria-label="Selección de cartas"><div class="selection-status"><span class="selection-count ${complete ? "complete" : ""}">${count}<small>/ 8</small></span><div><strong>${preset ? esc(preset.name) : "Selección personalizada"}</strong><span>${preset ? "" : complete ? "" : "Una carta por color"}</span></div></div>
-        <button class="button primary" data-action="share" ${complete ? "" : "disabled"} aria-label="Compartir selección">Compartir <span aria-hidden="true">↗</span></button>
+          : `      <section class="selection-bar" aria-label="Selección de cartas"><div class="selection-status"><div><strong>${preset ? esc(preset.name) : "Selección personalizada"}</strong><span>${complete ? `${count} de 8 cartas` : `${count} de 8 cartas · Una por color`}</span></div></div>
+        <button class="share-icon" data-action="share" ${complete ? "" : "disabled"} aria-label="Compartir selección" title="Compartir selección">${uiIcon("share")}</button>
       </section>
       ${preset ? `<aside class="preset-context"><strong>Pista:</strong> ${esc(preset.track)}${preset.note ? `<p>${esc(preset.note)}</p>` : ""}<a href="./Cubitos_BaseGame_Rulebook_Optimized.pdf#page=8" target="_blank" rel="noopener">Reglamento · p. 8 ↗</a></aside>` : ""}
-      <div class="table-toolbar"><div>${complete ? tableControls() : '<p class="subtle">Toca un color para elegir su carta.</p>'}</div><div class="preset-actions">${preset ? '<button class="text-button" data-action="customize" aria-label="Personalizar estas cartas">Personalizar</button>' : ""}<button class="text-button muted" data-action="reset" aria-label="Cambiar selección">Cambiar</button></div></div>
+      <div class="table-toolbar"><div class="preset-actions">${preset ? `<button class="edit-selection" data-action="customize">${uiIcon("edit")} Editar selección</button>` : complete ? '<span class="subtle">Selección personalizada</span>' : '<p class="subtle">Toca un color para elegir su carta.</p>'}</div>${complete ? tableControls() : ""}</div>
       <div class="cards-grid">${visible.map((color) => cardSlot(color, chosen[COLORS.indexOf(color)], mode === "custom")).join("") || '<p class="empty-results">Ninguna de estas cartas tiene habilidades en ese momento.</p>'}</div>
 
 `
@@ -100,11 +100,11 @@ function render() {
 function tableControls() {
   const allSelected = phaseFilters.size === PHASES.length;
   return `<div class="table-controls">
-    <details class="menu-control filter-menu" ${filtersOpen ? "open" : ""}><summary>Filtros</summary><div class="menu-panel" role="group" aria-label="Filtrar por momento de activación">
+    <details class="menu-control filter-menu" ${filtersOpen ? "open" : ""}><summary>${uiIcon("filter")}<span>Filtros</span></summary><div class="menu-panel" role="group" aria-label="Filtrar por momento de activación">
       <label><input type="checkbox" data-action="filter-all" ${allSelected ? "checked" : ""}> Todas</label>
       ${PHASES.map((phase) => `<label><input type="checkbox" data-action="filter" data-phase="${phase}" ${phaseFilters.has(phase) ? "checked" : ""}> ${phase}</label>`).join("")}
     </div></details>
-    <details class="menu-control order-menu"><summary>Ordenar</summary><div class="menu-panel" role="radiogroup" aria-label="Orden de las cartas">
+    <details class="menu-control order-menu"><summary>${uiIcon("sort")}<span>Ordenar</span></summary><div class="menu-panel" role="radiogroup" aria-label="Orden de las cartas">
       ${[
         ["manual", "Orden del manual"],
         ["price", "Precio"],
@@ -117,6 +117,18 @@ function tableControls() {
         .join("")}
     </div></details>
   </div>`;
+}
+
+function uiIcon(name) {
+  const icons = {
+    share:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5m0-5-9 9m9 0v4a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h4"/></svg>',
+    filter:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M7 12h10m-7 5h4"/><circle cx="9" cy="7" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="12" cy="17" r="2"/></svg>',
+    sort: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h10M8 12h7m-7 6h4M4 5v14m0 0-2-2m2 2 2-2"/></svg>',
+    edit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 3.8L7 19l10.6-10.6a2 2 0 0 0-2.8-2.8L4 16Z"/><path d="m13.5 6.8 2.8 2.8"/></svg>',
+  };
+  return icons[name];
 }
 
 function setupChoices() {

@@ -314,11 +314,6 @@ h1 em {
 .menu-control summary::-webkit-details-marker {
   display: none;
 }
-.menu-control summary::after {
-  content: "⌄";
-  font-size: 16px;
-  line-height: 1;
-}
 .menu-control[open] summary {
   background: #e7eee0;
   border-color: #78936f;
@@ -1164,5 +1159,121 @@ footer div {
   .cards-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
+  }
+}
+
+/* Lean selection header: status, context, then card-view controls. */
+.selection-bar {
+  margin-top: 14px;
+  padding: 13px 14px;
+  gap: 12px;
+  border-radius: 10px;
+  background: #eef2e7;
+}
+.selection-status strong {
+  display: block;
+  font-size: 17px;
+  line-height: 1.25;
+}
+.selection-status div > span {
+  display: block;
+  margin-top: 2px;
+  color: #5c7269;
+  font-size: 13px;
+  font-weight: 700;
+}
+.share-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  background: #205c4d;
+  color: #fff;
+  cursor: pointer;
+}
+.share-icon:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.share-icon svg,
+.menu-control summary svg,
+.edit-selection svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.preset-context {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 7px;
+  padding: 11px 2px 9px;
+  color: #5c6c65;
+  font-size: 13px;
+}
+.preset-context strong,
+.preset-context a {
+  color: #214e43;
+}
+.preset-context a {
+  margin-left: 0;
+  padding: 0;
+  font-size: 13px;
+}
+.preset-context p {
+  flex-basis: 100%;
+}
+.table-toolbar {
+  min-height: 0;
+  flex-direction: row;
+  align-items: center;
+  padding: 4px 0 10px;
+}
+.preset-actions {
+  min-width: 0;
+}
+.edit-selection {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 36px;
+  padding: 7px 1px;
+  border: 0;
+  background: transparent;
+  color: #49695e;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.table-controls {
+  flex: 0 0 auto;
+  gap: 7px;
+}
+.menu-control summary {
+  min-height: 36px;
+  padding: 7px 9px;
+  gap: 6px;
+  font-size: 13px;
+}
+.menu-control summary svg {
+  width: 16px;
+  height: 16px;
+}
+@media (min-width: 700px) {
+  .selection-bar {
+    margin-top: 22px;
+  }
+  .preset-context {
+    padding-top: 13px;
   }
 }
